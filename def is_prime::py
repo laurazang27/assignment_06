@@ -1,0 +1,29 @@
+from typing import List
+
+
+def primes_up_to(n: int) -> List[int]:
+    """Return a list of prime numbers <= n using the Sieve of Eratosthenes.
+
+    Complexity: O(n log log n) time and O(n) space.
+    """
+    if n < 2:
+        return []
+    sieve = bytearray(b"\x01") * (n + 1)
+    sieve[0:2] = b"\x00\x00"  # 0 and 1 are not prime
+    p = 2
+    while p * p <= n:
+        if sieve[p]:
+            step = p
+            start = p * p
+            sieve[start : n + 1 : step] = b"\x00" * (((n - start) // step) + 1)
+        p += 1
+    return [i for i, is_prime in enumerate(sieve) if is_prime]
+
+
+def main() -> None:
+    primes = primes_up_to(100)
+    print(primes)
+
+
+if __name__ == "__main__":
+    main()
